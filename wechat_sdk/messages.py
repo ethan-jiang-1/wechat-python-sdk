@@ -70,7 +70,8 @@ class LocationMessage(WechatMessage):
             location_y = message.pop('Location_Y')
             self.location = (float(location_x), float(location_y))
             self.scale = int(message.pop('Scale'))
-            self.label = message.pop('Label')
+            if message.has_key('Label'):
+                self.label = message.pop('Label')
         except KeyError:
             raise ParseError()
         super(LocationMessage, self).__init__(message)

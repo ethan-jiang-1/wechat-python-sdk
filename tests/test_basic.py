@@ -322,6 +322,35 @@ class WechatBasicTestCase(unittest.TestCase):
         self.assertEqual(message.scale, 20)
         self.assertEqual(message.label, '位置信息')
 
+
+    def test_parse_data_location_message_1(self):
+        message = """<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1473824316</CreateTime>
+<MsgType><![CDATA[location]]></MsgType>
+<Location_X>31.208914</Location_X>
+<Location_Y>121.457573</Location_Y>
+<Scale>16</Scale>
+<Label><![CDATA[]]></Label>
+<MsgId>6330027237677579351</MsgId>
+</xml>"""
+
+        wechat = WechatBasic()
+
+        wechat.parse_data(data=message)
+        message = wechat.message
+
+        self.assertIsInstance(message, LocationMessage)
+        self.assertEqual(message.id, 6330027237677579351)
+        self.assertEqual(message.target, 'toUser')
+        self.assertEqual(message.source, 'fromUser')
+        self.assertEqual(message.time, 1473824316)
+        self.assertEqual(message.type, 'location')
+        self.assertEqual(message.location, (31.208914, 121.457573))
+        self.assertEqual(message.scale, 16)
+        self.assertFalse(hasattr(message,"label"))
+
     def test_parse_data_link_message(self):
         message = """<xml>
 <ToUserName><![CDATA[toUser]]></ToUserName>
